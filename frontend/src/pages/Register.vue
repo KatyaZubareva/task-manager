@@ -2,7 +2,7 @@
   <div class="register-page">
     <div class="register-card">
 
-      <h1>Create an account</h1>
+      <h2>Create an account</h2>
       <p class="subtitle">Start organizing your tasks smarter and faster.</p>
 
       <form @submit.prevent="register">
@@ -52,6 +52,27 @@ const register = () => {
 </script>
 
 <style scoped>
+
+h1 {
+  font-size: 48px;
+}
+
+h2 {
+  font-size: 24px;
+}
+
+h3 {
+  font-size: 16px;
+}
+
+h4 {
+  font-size: 18px;
+}
+
+p {
+  font-size: 16px;
+}
+
 .register-page {
   display: flex;
   justify-content: center;
@@ -72,7 +93,6 @@ const register = () => {
   text-align: center;
 }
 
-/* Заголовки */
 .register-card h1 {
   font-size: 2.2em;
   margin-bottom: 10px;
@@ -84,7 +104,6 @@ const register = () => {
   font-size: 1.05em;
 }
 
-/* Инпуты */
 .input-group {
   text-align: left;
   margin-bottom: 20px;
@@ -112,7 +131,6 @@ const register = () => {
   border-color: #ff4500;
 }
 
-/* Кнопка */
 .register-btn {
   width: 100%;
   padding: 14px;
@@ -132,7 +150,6 @@ const register = () => {
   background-color: #e43f00;
 }
 
-/* Текст ссылки на логин */
 .login-text {
   margin-top: 20px;
   font-size: 0.95em;

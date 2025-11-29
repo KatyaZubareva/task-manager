@@ -18,7 +18,22 @@
   </div>
 </template>
 
+<script setup>
+</script>
+
 <style scoped>
+
+h1 {
+  font-size: 48px;
+}
+
+h2 {
+  font-size: 24px;
+}
+
+p {
+  font-size: 16px;
+}
 
 .hero-section {
   display: flex;
@@ -45,13 +60,13 @@
 .hero-icon {
   height: 8em;
   width: 8em;
+  margin: 2em 0 2em 0;
 }
 
 .hero-section h1 {
-  font-size: 3.5em;
   font-weight: 800;
   line-height: 1.15;
-  margin: 0 0 20px;
+  margin: 0 0 10px;
 }
 
 .hero-section span {
@@ -60,7 +75,6 @@
 
 .hero-description {
   max-width: 600px;
-  font-size: 1.2em;
   color: #6c7a89;
   margin-bottom: 30px;
   line-height: 1.5;
@@ -77,7 +91,7 @@
 
   border: none;
   border-radius: 1000px;
-  font-size: 1.1em;
+  font-size: 16px;
   font-weight: bold;
   cursor: pointer;
 

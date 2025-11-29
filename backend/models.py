@@ -1,4 +1,5 @@
 # models.py
+# User model and database schema
 from typing import Annotated
 
 from fastapi import Depends, FastAPI, HTTPException, Query
