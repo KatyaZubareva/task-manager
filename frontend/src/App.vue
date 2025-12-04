@@ -12,7 +12,7 @@
       <div class="navigation">
         <h3><router-link to="/">Home</router-link></h3>
         <h3><router-link to="/tasks">Tasks</router-link></h3>
-        <h3><router-link to="/tasks">About</router-link></h3>
+        <h3><router-link to="/subscription">Subscription</router-link></h3>
       </div>
 
       <div class="auth-buttons">
@@ -118,6 +118,11 @@ nav {
   margin: 0;
 }
 
+.navigation a.router-link-active {
+  color: #ff4500;
+  font-weight: 600;
+}
+
 a {
   text-decoration: none;
   color: black;
@@ -147,12 +152,21 @@ a:hover {
 }
 
 .login-nav-btn {
-  color: black;
+  background: none;
+  color: rgb(0, 0, 0);
+  padding: 10px 25px;
+  border-radius: 50px;
+  border: none;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.3s ease;
 }
 
 .login-nav-btn:hover {
-  color: #ff4500;
+  transform: translateY(-2px);
+  color: #e03f00;
 }
+
 
 .register-btn {
   background-color: black;
@@ -219,8 +233,10 @@ a:hover {
 }
 
 .reject:hover {
-  color: #0000;
-  border: #0000 solid 1px;
+  background: rgba(224, 63, 0, 0.1);
+  color: #e03f00;
+  border-color: #e03f00;
+  transform: translateY(-1px);
 }
 
 @media (max-width: 600px) {

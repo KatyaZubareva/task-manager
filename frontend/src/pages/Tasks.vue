@@ -5,21 +5,17 @@
 
     <div class="calendar-grid">
 
-      <!-- Подписи дней недели -->
       <div class="day-name" v-for="d in dayNames" :key="d">{{ d }}</div>
 
-      <!-- Дни месяца -->
       <div class="day-cell" v-for="n in 30" :key="n">
         <div class="day-number">{{ n }}</div>
 
-        <!-- Превью статусов задач -->
         <div class="tasks-status">
           <span class="status pending"></span>
           <span class="status progress"></span>
           <span class="status done"></span>
         </div>
 
-        <!-- Место для заметок -->
         <div class="day-note">
           <p>Write your notes here...</p>
         </div>
@@ -38,7 +34,6 @@
   font-family: system-ui;
 }
 
-/* Заголовок */
 .title {
   text-align: center;
   font-size: 2.4em;
@@ -47,14 +42,12 @@
   color: #2b2b2b;
 }
 
-/* GRID */
 .calendar-grid {
   display: grid;
   grid-template-columns: repeat(7, 1fr);
   gap: 15px;
 }
 
-/* Подписи дней недели */
 .day-name {
   text-align: center;
   font-weight: 600;
@@ -64,7 +57,6 @@
   border-bottom: 1px solid #ddd;
 }
 
-/* Ячейка дня */
 .day-cell {
   background: #ffffff;
   border-radius: 16px;
@@ -81,7 +73,6 @@
   box-shadow: 0 4px 18px rgba(255,140,78,0.15);
 }
 
-/* Номер дня */
 .day-number {
   font-weight: 700;
   color: #3a3a3a;
@@ -89,7 +80,6 @@
   margin-bottom: 8px;
 }
 
-/* Статусы задач */
 .tasks-status {
   display: flex;
   gap: 5px;
@@ -107,7 +97,6 @@
 .progress { background: #cfe7ff; }
 .done { background: #dff5d8; }
 
-/* Заметка */
 .day-note {
   flex-grow: 1;
   font-size: 0.85em;
@@ -123,7 +112,6 @@
   text-overflow: ellipsis;
 }
 
-/* Адаптив */
 @media (max-width: 900px) {
   .calendar-grid {
     grid-template-columns: repeat(4, 1fr);
