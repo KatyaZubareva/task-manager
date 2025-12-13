@@ -1,4 +1,20 @@
 <script setup>
+import { useCookies } from 'vue3-cookies';
+import { ref } from 'vue';
+
+const { cookies } = useCookies()
+
+const acceptCookies = () => {
+  cookies.set('cookies_accepted', true)
+  showBanner.value = false
+}
+
+const rejectCookies = () => {
+  cookies.set('cookies_accepted', false)
+  showBanner.value = false
+}
+
+const showBanner = ref(!cookies.get('cookies_accepted'))
 </script>
 
 <template>
@@ -27,7 +43,7 @@
     </div>
   </nav>
 
-  <div class="cookie-banner">
+  <div class="cookie-banner" v-if="showBanner">
     <div>
       <h4 class="cookie-header">We use cookies!</h4>
       <p class="cookie-text">
@@ -36,8 +52,8 @@
       </p>
     </div>
 
-    <button class="cookie-button reject">Reject</button>
-    <button class="cookie-button">Agree</button>
+    <button class="cookie-button reject" @click="rejectCookies">Reject</button>
+    <button class="cookie-button" @click="acceptCookies">Agree</button>
   </div>
 
   <router-view />
