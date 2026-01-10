@@ -1,9 +1,11 @@
+import { createRouter, createWebHistory } from 'vue-router'
+
 import Home from '@/pages/Home.vue'
 import Tasks from '@/pages/Tasks.vue'
 import NotFound from '@/pages/NotFound.vue'  
-import { createRouter, createWebHistory } from 'vue-router'
 import Register from '@/pages/Register.vue'
 import Login from '@/pages/Login.vue'
+import Profile from '@/pages/Profile.vue'
 import Subscription from '@/pages/Subscription.vue'
 
 const router = createRouter({
@@ -37,6 +39,12 @@ const router = createRouter({
       path: '/login',
       name: 'Login',
       component: Login
+    },
+
+    {
+      path: '/profile',
+      name: 'Profile',
+      component: Profile
     },
 
     {
