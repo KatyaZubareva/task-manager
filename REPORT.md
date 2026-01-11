@@ -161,11 +161,37 @@
 > **Примечание:** Для получения актуальных скриншотов необходимо запустить приложение и сделать снимки экрана следующих страниц:
 
 1. **Главная страница** (`/`) — приветственный экран с кнопкой "Go to tasks"
+
+![Главная](./screenshots/home_page.png)
+![Регистрация](./screenshots/registration.png)
+![Вход](./screenshots/login.png)
+![Профиль](./screenshots/profile.png)
+
 2. **Список задач** (`/tasks/workspace`) — отображение задач с фильтрами и сортировкой
+
+![Список задач](./screenshots/tasks_info_page.png)
+![Список задач](./screenshots/tasks.png)
+![Задача](./screenshots/new_task.png)
+![Список задач](./screenshots/task_added.png)
+
 3. **Фильтрация/сортировка** — демонстрация работы фильтров по статусу и сортировки по дате/алфавиту
+
+![Фильтрация](./screenshots/filter_all_sort_alphabet.png)
+![Фильтрация](./screenshots/filter_all_sort_date.png)
+![Фильтрация](./screenshots/filter_done_sort_alphabet.png)
+![Фильтрация](./screenshots/filter_pending_sort_alphabet.png)
+
 4. **Форма создания** (`/tasks/new`) — форма с полями: заголовок, описание, приоритет, категория, важно
+
+![Форма создания](./screenshots/new_task.png)
+
 5. **Форма редактирования** (`/tasks/:id/edit`) — та же форма, но с заполненными данными
+
+![Форма редактирования](./screenshots/edit_task.png)
+
 6. **Страница 404** — отображение страницы для несуществующих маршрутов
+
+![Страница 404](./screenshots/404.png)
 
 ---
 
