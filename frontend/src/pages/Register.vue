@@ -64,6 +64,7 @@ const register = async () => {
     return
   }
 
+  sessionStorage.setItem('registrationSuccess', 'true')
   router.push('/login')
 }
 </script>

@@ -1,8 +1,8 @@
-# QuickFront / Task Manager
+# ClearBoard / Task Manager
 
 ## Описание проекта
 
-**QuickFront** — это веб-сервис для управления задачами, разработанный с использованием современных технологий фронтенда и бэкенда. Проект предоставляет интуитивно понятный интерфейс для создания, отслеживания и управления задачами, с акцентом на продуктивность и удобство пользователя.
+**ClearBoard** — это веб-сервис для управления задачами, разработанный с использованием современных технологий фронтенда и бэкенда. Проект предоставляет интуитивно понятный интерфейс для создания, отслеживания и управления задачами, с акцентом на продуктивность и удобство пользователя.
 
 Проект включает:
 - Автоматизированный интерфейс задач с возможностью добавления, редактирования, удаления и изменения статуса задач.
@@ -51,3 +51,46 @@
 ```bash
 git clone https://github.com/KatyaZubareva/task-manager.git
 cd task-manager
+```
+
+### Запуск через Docker (рекомендуется):
+
+1. **Сборка и запуск контейнеров:**
+```bash
+docker compose build
+docker compose up
+```
+
+2. **Доступ к приложению:**
+- Frontend: http://localhost
+- Backend API: http://localhost:8000
+- API документация: http://localhost:8000/docs
+
+3. **Остановка:**
+```bash
+docker compose down
+```
+
+### Локальный запуск (без Docker):
+
+**Backend:**
+```bash
+cd backend
+python -m venv venv
+source venv/bin/activate  # Windows: venv\Scripts\activate
+pip install -r requirements.txt
+uvicorn main:app --reload
+```
+
+**Frontend:**
+```bash
+cd frontend
+npm install
+npm run dev
+```
+
+---
+
+## Отчет
+
+Полный отчет по выполнению задания находится в файле [REPORT.md](./REPORT.md)

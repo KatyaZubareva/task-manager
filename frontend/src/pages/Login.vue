@@ -4,6 +4,10 @@
       <h2>Log In</h2>
       <p class="subtitle">Welcome back! Enter your credentials to continue.</p>
 
+      <div v-if="showSuccessMessage" class="success-message">
+        ✓ Registration successful! Please log in with your credentials.
+      </div>
+
       <form @submit.prevent="login">
         <div class="input-group">
           <label>Email</label>
@@ -27,12 +31,24 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 
 const email = ref('')
 const password = ref('')
 const router = useRouter()
+const showSuccessMessage = ref(false)
+
+onMounted(() => {
+  if (sessionStorage.getItem('registrationSuccess') === 'true') {
+    showSuccessMessage.value = true
+    sessionStorage.removeItem('registrationSuccess')
+    
+    setTimeout(() => {
+      showSuccessMessage.value = false
+    }, 5000)
+  }
+})
 
 const login = async () => {
   const form = new FormData()
@@ -58,6 +74,14 @@ const login = async () => {
 
 
 <style scoped>
+
+h2 {
+  font-size: 24px;
+}
+
+p {
+  font-size: 16px;
+}
 
 .login-page {
   height: 100dvh;
@@ -94,6 +118,7 @@ const login = async () => {
 .subtitle {
   color: #6e6e6e;
   margin-bottom: 30px;
+  font-size: 1.05em;
 }
 
 .input-group {
@@ -133,7 +158,8 @@ const login = async () => {
   cursor: pointer;
   transition: 0.25s;
   margin-top: 10px;
-  font-weight: 600;
+  font-weight: bold;
+  font-size: 1.1em;
 }
 
 .login-btn:hover {
@@ -150,6 +176,29 @@ const login = async () => {
 .register-text a {
   color: #ff4500;
   font-weight: 600;
+}
+
+.success-message {
+  background-color: #d4edda;
+  color: #155724;
+  padding: 12px 16px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+  border: 1px solid #c3e6cb;
+  font-size: 14px;
+  text-align: left;
+  animation: slideIn 0.3s ease;
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 html, body {

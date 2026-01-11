@@ -70,18 +70,20 @@ p {
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: center;
   text-align: center;
   padding: 80px 20px;
   font-family: system-ui;
   color: #0b0b0b;
   background: #f9f9f9;
-  margin-top: 5em;
+  min-height: 100vh;
+  margin-top: 0;
 }
 
 .subtitle {
   color: #6c7a89;
   margin-bottom: 50px;
-  font-size: 18px;
+  font-size: 16px;
 }
 
 .plans-container {

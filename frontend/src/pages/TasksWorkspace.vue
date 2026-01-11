@@ -7,7 +7,7 @@
           <h1>My Tasks</h1>
           <p v-if="tasks.length">You have {{ tasks.length }} active tasks</p>
         </div>
-        <router-link to="/tasks/new">
+        <router-link :to="{ name: 'TaskNew' }">
           <button class="add-btn">
             <span class="plus-icon">+</span>
             New Task
@@ -15,7 +15,26 @@
         </router-link>
       </header>
 
-      <div v-if="tasks.length === 0" class="empty-state">
+      <div class="filters-section">
+        <div class="filter-group">
+          <label>Filter by status:</label>
+          <select v-model="statusFilter" class="filter-select">
+            <option value="all">All</option>
+            <option value="completed">Completed</option>
+            <option value="pending">Pending</option>
+          </select>
+        </div>
+
+        <div class="filter-group">
+          <label>Sort by:</label>
+          <select v-model="sortBy" class="filter-select">
+            <option value="date">Date</option>
+            <option value="alphabet">Alphabet</option>
+          </select>
+        </div>
+      </div>
+
+      <div v-if="filteredAndSortedTasks.length === 0" class="empty-state">
         <h3>All Clear!</h3>
         <p>No more tasks for today. Time to relax.</p>
       </div>
@@ -23,11 +42,12 @@
       <div v-else class="task-grid">
         <TransitionGroup name="list">
           <TaskItem
-            v-for="task in tasks"
+            v-for="task in filteredAndSortedTasks"
             :key="task.id"
             :task="task"
             @delete="deleteTask"
             @toggle="toggleTask"
+            @edit="editTask"
           />
         </TransitionGroup>
       </div>
@@ -36,10 +56,14 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref, computed, onMounted } from 'vue'
+import { useRouter } from 'vue-router'
 import TaskItem from '@/components/TaskItem.vue'
 
+const router = useRouter()
 const tasks = ref([])
+const statusFilter = ref('all')
+const sortBy = ref('date')
 
 const loadTasks = async () => {
   try {
@@ -53,6 +77,26 @@ const loadTasks = async () => {
     console.error("Loading error:", e)
   }
 }
+
+const filteredTasks = computed(() => {
+  if (statusFilter.value === 'all') return tasks.value
+  if (statusFilter.value === 'completed') return tasks.value.filter(t => t.completed)
+  return tasks.value.filter(t => !t.completed)
+})
+
+const filteredAndSortedTasks = computed(() => {
+  const filtered = [...filteredTasks.value]
+  
+  if (sortBy.value === 'alphabet') {
+    return filtered.sort((a, b) => a.title.localeCompare(b.title))
+  }
+  
+  return filtered.sort((a, b) => {
+    const dateA = a.created_at ? new Date(a.created_at) : new Date(0)
+    const dateB = b.created_at ? new Date(b.created_at) : new Date(0)
+    return dateB - dateA
+  })
+})
 
 const deleteTask = async (id) => {
   await fetch(`http://localhost:8000/api/tasks/${id}`, {
@@ -75,6 +119,10 @@ const toggleTask = async (task) => {
     })
   })
   loadTasks()
+}
+
+const editTask = (task) => {
+  router.push(`/tasks/${task.id}/edit`)
 }
 
 onMounted(loadTasks)
@@ -160,11 +208,53 @@ a {
   margin-bottom: 10px;
 }
 
+.filters-section {
+  display: flex;
+  gap: 20px;
+  margin-bottom: 30px;
+  padding: 20px;
+  background: white;
+  border-radius: 16px;
+  border: 1px solid #eee;
+}
+
+.filter-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.filter-group label {
+  font-size: 14px;
+  font-weight: 600;
+  color: #6c7a89;
+}
+
+.filter-select {
+  padding: 10px 16px;
+  border-radius: 12px;
+  border: 1px solid #e5e7eb;
+  background: #fdfdfd;
+  font-family: inherit;
+  font-size: 14px;
+  cursor: pointer;
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+.filter-select:focus {
+  border-color: #ff4500;
+}
+
 @media (max-width: 600px) {
   .header {
     flex-direction: column;
     align-items: flex-start;
     gap: 20px;
+  }
+  
+  .filters-section {
+    flex-direction: column;
   }
 }
 </style>

@@ -1,8 +1,10 @@
 <script setup>
 import { useCookies } from 'vue3-cookies';
 import { ref, computed, onMounted } from 'vue';
+import { useRouter } from 'vue-router';
 
 const { cookies } = useCookies()
+const router = useRouter()
 
 const acceptCookies = () => {
   cookies.set('cookies_accepted', true)
@@ -30,6 +32,10 @@ onMounted(() => {
   })
   
   window.addEventListener('popstate', checkAuth)
+  
+  router.afterEach(() => {
+    checkAuth()
+  })
 })
 
 const tasksLink = computed(() => {
@@ -52,12 +58,21 @@ const tasksLink = computed(() => {
       </div>
 
       <div class="auth-buttons">
-        <router-link to="/login">
+        <router-link v-if="!isAuthenticated" to="/login">
           <button class="btn login-nav-btn">Login</button>
         </router-link>
 
-        <router-link to="/register">
+        <router-link v-if="!isAuthenticated" to="/register">
           <button class="btn register-btn">Create account</button>
+        </router-link>
+
+        <router-link v-if="isAuthenticated" to="/profile" class="profile-icon-link">
+          <div class="profile-icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+              <circle cx="12" cy="7" r="4"></circle>
+            </svg>
+          </div>
         </router-link>
       </div>
     </div>
@@ -209,6 +224,32 @@ a:hover {
 
 .register-btn:hover {
   background-color: #ff4500;
+}
+
+.profile-icon-link {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+}
+
+.profile-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background-color: #f5f5f5;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  color: #333;
+}
+
+.profile-icon:hover {
+  background-color: #ff4500;
+  color: white;
+  transform: translateY(-2px);
 }
 
 .cookie-banner {

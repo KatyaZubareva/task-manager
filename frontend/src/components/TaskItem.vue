@@ -16,6 +16,10 @@
         {{ task.completed ? 'Undo' : 'Mark done' }}
       </button>
 
+      <button class="pill-btn edit" @click="$emit('edit', task)">
+        Edit
+      </button>
+
       <button class="pill-btn delete" @click="$emit('delete', task.id)">
         Delete
       </button>
@@ -33,7 +37,7 @@ const props = defineProps({
   }
 })
 
-defineEmits(['delete', 'toggle'])
+defineEmits(['delete', 'toggle', 'edit'])
 
 const statusText = computed(() =>
   props.task.completed ? 'done' : 'pending'
@@ -120,6 +124,17 @@ const statusClass = computed(() =>
   color: white;
   border-color: #ff4500;
   box-shadow: 0 4px 12px rgba(255, 69, 0, 0.2);
+}
+
+.pill-btn.edit {
+  border-color: #0b0b0b;
+  color: #0b0b0b;
+}
+
+.pill-btn.edit:hover {
+  background: #0b0b0b;
+  color: white;
+  border-color: #0b0b0b;
 }
 
 .pill-btn.delete {

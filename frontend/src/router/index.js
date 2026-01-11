@@ -8,6 +8,8 @@ import Login from '@/pages/Login.vue'
 import Profile from '@/pages/Profile.vue'
 import Subscription from '@/pages/Subscription.vue'
 import TasksWorkspace from '@/pages/TasksWorkspace.vue'
+import TaskNew from '@/pages/TaskNew.vue'
+import TaskEdit from '@/pages/TaskEdit.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -29,7 +31,16 @@ const router = createRouter({
       name: 'TasksWorkspace',
       component: TasksWorkspace
     },
-
+    {
+      path: '/tasks/new',
+      name: 'TaskNew',
+      component: TaskNew
+    },
+    {
+      path: '/tasks/:id/edit',
+      name: 'TaskEdit',
+      component: TaskEdit
+    },
     {
       path: '/register',
       name: 'Register',
@@ -52,8 +63,12 @@ const router = createRouter({
       path: '/subscription',
       name: 'Subscription',
       component: Subscription
+    },
+    {
+      path: '/:pathMatch(.*)*',
+      name: 'NotFound',
+      component: NotFound
     }
-
   ],
 })
 

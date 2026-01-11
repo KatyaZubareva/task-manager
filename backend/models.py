@@ -13,9 +13,13 @@ class Task(SQLModel, table=True):
     title: str
     description: str
     completed: bool = False
+    priority: str = "medium"
+    category: str = "general"
+    important: bool = False
+    created_at: Optional[str] = None
     user_id: Optional[int] = Field(default=None, foreign_key="user.id")
 
-sqlite_file_name = "database.db"
+sqlite_file_name = "data/database.db"
 sqlite_url = f"sqlite:///{sqlite_file_name}"
 
 engine = create_engine(
