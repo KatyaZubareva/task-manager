@@ -1,8 +1,9 @@
 from fastapi import FastAPI, Depends, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.security import OAuth2PasswordRequestForm
-from sqlmodel import Session, select
+from sqlmodel import SQLModel, Session, select
 from datetime import datetime
+from typing import Optional
 
 from models import Task, User, create_db_and_tables, get_session
 from auth import create_access_token, get_current_user
@@ -47,7 +48,7 @@ def login(
         raise HTTPException(status_code=401, detail="Invalid credentials")
 
     token = create_access_token({"sub": user.email})
-    return {"access_token": token, "token_type": "bearer"}
+    return {"access_token": token, "token_type": "bearer", "email": user.email}
 
 
 @app.get("/api/tasks")
@@ -125,3 +126,42 @@ def delete_task(
     session.delete(task)
     session.commit()
     return {"ok": True}
+
+
+@app.get("/api/user/me")
+def get_current_user_profile(
+    user: User = Depends(get_current_user)
+):
+    return {
+        "id": user.id,
+        "email": user.email,
+        "name": user.name or "User",
+        "bio": user.bio or ""
+    }
+
+
+class UserUpdate(SQLModel):
+    name: Optional[str] = None
+    bio: Optional[str] = None
+
+@app.put("/api/user/me")
+def update_user_profile(
+    user_update: UserUpdate,
+    session: Session = Depends(get_session),
+    user: User = Depends(get_current_user)
+):
+    if user_update.name is not None:
+        user.name = user_update.name
+    if user_update.bio is not None:
+        user.bio = user_update.bio
+    
+    session.add(user)
+    session.commit()
+    session.refresh(user)
+    
+    return {
+        "id": user.id,
+        "email": user.email,
+        "name": user.name or "User",
+        "bio": user.bio or ""
+    }

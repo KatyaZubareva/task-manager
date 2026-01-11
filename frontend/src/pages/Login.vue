@@ -67,6 +67,9 @@ const login = async () => {
 
   const data = await res.json()
   localStorage.setItem('token', data.access_token)
+  if (data.email) {
+    localStorage.setItem('email', data.email)
+  }
 
   router.push('/tasks')
 }

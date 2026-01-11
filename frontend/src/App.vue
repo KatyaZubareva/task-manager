@@ -54,7 +54,6 @@ const tasksLink = computed(() => {
       <div class="navigation">
         <h3><router-link to="/">Home</router-link></h3>
         <h3><router-link :to="tasksLink">Tasks</router-link></h3>
-        <h3><router-link to="/subscription">Subscription</router-link></h3>
       </div>
 
       <div class="auth-buttons">

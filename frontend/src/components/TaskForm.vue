@@ -188,7 +188,9 @@ h1 {
   gap: 20px;
 }
 
-.form-input, .form-textarea {
+.form-input, 
+.form-textarea,
+.form-select {
   width: 100%;
   padding: 15px 20px;
   border-radius: 16px;
@@ -198,9 +200,12 @@ h1 {
   font-size: 16px;
   outline: none;
   transition: border-color 0.2s;
+  box-sizing: border-box;
 }
 
-.form-input:focus, .form-textarea:focus {
+.form-input:focus, 
+.form-textarea:focus,
+.form-select:focus {
   border-color: #ff4500;
 }
 
@@ -220,22 +225,6 @@ h1 {
   font-size: 14px;
   font-weight: 600;
   color: #6c7a89;
-}
-
-.form-select {
-  padding: 12px 16px;
-  border-radius: 12px;
-  border: 1px solid #e5e7eb;
-  background: #fdfdfd;
-  font-family: inherit;
-  font-size: 14px;
-  cursor: pointer;
-  outline: none;
-  transition: border-color 0.2s;
-}
-
-.form-select:focus {
-  border-color: #ff4500;
 }
 
 .radio-group {

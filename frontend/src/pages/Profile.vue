@@ -3,32 +3,60 @@
     <div class="profile-card">
       
       <div class="profile-header">
-        <div class="avatar-container">
-          <img :src="user.avatar" alt="Avatar" class="avatar-img" />
-          <button class="edit-avatar-btn" title="Change photo">
-            <span>+</span>
-          </button>
-        </div>
-        <h2>{{ user.name }}</h2>
+        <h2>{{ user.name || 'User' }}</h2>
         <p class="user-email">{{ user.email }}</p>
       </div>
 
       <hr class="divider" />
 
-      <div class="profile-content">
+      <div v-if="!isEditing" class="profile-content">
         <div class="info-row">
           <label>Full Name</label>
-          <div class="info-value">{{ user.name }}</div>
+          <div class="info-value">{{ user.name || 'Not set' }}</div>
+        </div>
+
+        <div class="info-row">
+          <label>Email</label>
+          <div class="info-value">{{ user.email }}</div>
         </div>
 
         <div class="info-row">
           <label>Bio</label>
-          <p class="info-text">{{ user.bio }}</p>
+          <p class="info-text">{{ user.bio || 'No bio yet' }}</p>
         </div>
       </div>
 
-      <div class="profile-actions">
-        <button class="edit-btn">Edit Profile</button>
+      <div v-else class="profile-edit">
+        <form @submit.prevent="saveProfile">
+          <div class="input-group">
+            <label>Full Name</label>
+            <input 
+              type="text" 
+              v-model="editForm.name" 
+              placeholder="Enter your name"
+              class="form-input"
+            />
+          </div>
+
+          <div class="input-group">
+            <label>Bio</label>
+            <textarea 
+              v-model="editForm.bio" 
+              placeholder="Tell us about yourself"
+              class="form-textarea"
+              rows="4"
+            ></textarea>
+          </div>
+
+          <div class="form-actions">
+            <button type="button" class="cancel-btn" @click="cancelEdit">Cancel</button>
+            <button type="submit" class="save-btn">Save Changes</button>
+          </div>
+        </form>
+      </div>
+
+      <div v-if="!isEditing" class="profile-actions">
+        <button class="edit-btn" @click="startEdit">Edit Profile</button>
         <button class="logout-btn" @click="handleLogout">Log Out</button>
       </div>
 
@@ -45,31 +73,107 @@ const router = useRouter()
 const user = ref({
   name: '',
   email: '',
-  bio: '',
-  avatar: ''
+  bio: ''
 })
 
-onMounted(() => {
-  const token = localStorage.getItem('token')
+const isEditing = ref(false)
+const editForm = ref({
+  name: '',
+  bio: ''
+})
 
+const loadProfile = async () => {
+  const token = localStorage.getItem('token')
   if (!token) {
     router.push('/login')
     return
   }
 
-  user.value = {
-    name: 'User',
-    email: localStorage.getItem('email'),
-    bio: 'Task Manager user',
-    avatar: `https://api.dicebear.com/7.x/avataaars/svg?seed=${localStorage.getItem('email')}`
+  try {
+    const res = await fetch('http://localhost:8000/api/user/me', {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    })
+
+    if (!res.ok) {
+      throw new Error('Failed to load profile')
+    }
+
+    const data = await res.json()
+    user.value = {
+      name: data.name || '',
+      email: data.email || '',
+      bio: data.bio || ''
+    }
+  } catch (error) {
+    console.error('Error loading profile:', error)
+    const email = localStorage.getItem('email')
+    user.value = {
+      name: 'User',
+      email: email || '',
+      bio: ''
+    }
   }
-})
+}
+
+const startEdit = () => {
+  editForm.value = {
+    name: user.value.name || '',
+    bio: user.value.bio || ''
+  }
+  isEditing.value = true
+}
+
+const cancelEdit = () => {
+  isEditing.value = false
+  editForm.value = {
+    name: '',
+    bio: ''
+  }
+}
+
+const saveProfile = async () => {
+  const token = localStorage.getItem('token')
+  if (!token) {
+    router.push('/login')
+    return
+  }
+
+  try {
+    const res = await fetch('http://localhost:8000/api/user/me', {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`
+      },
+      body: JSON.stringify({
+        name: editForm.value.name || null,
+        bio: editForm.value.bio || null
+      })
+    })
+
+    if (!res.ok) {
+      throw new Error('Failed to update profile')
+    }
+
+    await loadProfile()
+    isEditing.value = false
+  } catch (error) {
+    console.error('Error saving profile:', error)
+    alert('Failed to save profile. Please try again.')
+  }
+}
 
 const handleLogout = () => {
   localStorage.removeItem('token')
   localStorage.removeItem('email')
   router.push('/login')
 }
+
+onMounted(() => {
+  loadProfile()
+})
 </script>
 
 
@@ -79,9 +183,10 @@ const handleLogout = () => {
   justify-content: center;
   align-items: center;
   min-height: 100vh;
-  background: #fcfcfc;
+  background: #f9fafb;
   font-family: system-ui, -apple-system, sans-serif;
   padding: 20px;
+  margin-top: 5em;
 }
 
 .profile-card {
@@ -89,7 +194,7 @@ const handleLogout = () => {
   padding: 40px 35px;
   border-radius: 20px;
   width: 100%;
-  max-width: 450px;
+  max-width: 500px;
   box-shadow: 0 10px 40px rgba(0,0,0,0.06);
   text-align: center;
 }
@@ -98,49 +203,17 @@ const handleLogout = () => {
   margin-bottom: 25px;
 }
 
-.avatar-container {
-  position: relative;
-  width: 110px;
-  height: 110px;
-  margin: 0 auto 15px;
-}
-
-.avatar-img {
-  width: 100%;
-  height: 100%;
-  border-radius: 50%;
-  object-fit: cover;
-  border: 4px solid #fff;
-  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-}
-
-.edit-avatar-btn {
-  position: absolute;
-  bottom: 0;
-  right: 0;
-  background: #ff4500;
-  color: white;
-  border: none;
-  width: 32px;
-  height: 32px;
-  border-radius: 50%;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-weight: bold;
-  box-shadow: 0 2px 8px rgba(255, 69, 0, 0.4);
-}
-
 .profile-header h2 {
-  margin: 10px 0 5px;
-  font-size: 1.6em;
+  margin: 0 0 5px;
+  font-size: 24px;
   color: #222;
+  font-weight: 700;
 }
 
 .user-email {
   color: #888;
-  font-size: 0.95em;
+  font-size: 16px;
+  margin: 0;
 }
 
 .divider {
@@ -158,23 +231,102 @@ const handleLogout = () => {
 }
 
 .info-row label {
-  font-size: 0.85em;
+  font-size: 14px;
   color: #999;
   text-transform: uppercase;
   letter-spacing: 0.5px;
   display: block;
-  margin-bottom: 5px;
+  margin-bottom: 8px;
+  font-weight: 600;
 }
 
 .info-value {
   font-weight: 500;
   color: #333;
+  font-size: 16px;
 }
 
 .info-text {
-  font-size: 0.95em;
+  font-size: 16px;
   color: #555;
   line-height: 1.5;
+  margin: 0;
+}
+
+.profile-edit {
+  text-align: left;
+}
+
+.input-group {
+  margin-bottom: 20px;
+}
+
+.input-group label {
+  display: block;
+  margin-bottom: 8px;
+  color: #333;
+  font-weight: 600;
+  font-size: 14px;
+}
+
+.form-input,
+.form-textarea {
+  width: 100%;
+  padding: 12px 16px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  font-size: 16px;
+  font-family: inherit;
+  outline: none;
+  transition: border-color 0.2s;
+  box-sizing: border-box;
+}
+
+.form-input:focus,
+.form-textarea:focus {
+  border-color: #ff4500;
+}
+
+.form-textarea {
+  resize: vertical;
+  min-height: 100px;
+}
+
+.form-actions {
+  display: flex;
+  gap: 12px;
+  margin-top: 25px;
+}
+
+.cancel-btn,
+.save-btn {
+  flex: 1;
+  padding: 12px;
+  border-radius: 100px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.25s;
+  border: none;
+}
+
+.cancel-btn {
+  background-color: #f5f5f5;
+  color: #666;
+}
+
+.cancel-btn:hover {
+  background-color: #e8e8e8;
+}
+
+.save-btn {
+  background-color: #ff4500;
+  color: white;
+}
+
+.save-btn:hover {
+  background-color: #e43f00;
+  transform: translateY(-1px);
 }
 
 .profile-actions {
@@ -187,7 +339,7 @@ const handleLogout = () => {
 .edit-btn {
   width: 100%;
   padding: 14px;
-  font-size: 1em;
+  font-size: 16px;
   font-weight: 600;
   border-radius: 100px;
   border: none;
@@ -205,7 +357,7 @@ const handleLogout = () => {
 .logout-btn {
   width: 100%;
   padding: 12px;
-  font-size: 1em;
+  font-size: 16px;
   font-weight: 600;
   border-radius: 100px;
   border: 1px solid #ddd;
