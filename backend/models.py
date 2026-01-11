@@ -1,28 +1,27 @@
-# models.py
-# User model and database schema
-from typing import Annotated
+from typing import Optional
+from sqlmodel import SQLModel, Field, Session, create_engine
+from fastapi import Depends
 
-from fastapi import Depends, FastAPI, HTTPException, Query
-from sqlmodel import Field, Session, SQLModel, create_engine, select
-
-
-# MODELS
 class User(SQLModel, table=True):
-    id: int | None = Field(default=None, primary_key=True)
-    login: str = Field(index=True, unique=True)
+    id: Optional[int] = Field(default=None, primary_key=True)
+    email: str = Field(index=True, unique=True)
     password: str
 
-class Task(SQLModel, table=True):
-    id: int | None = Field(default=None, primary_key=True)
-    name: str = Field(index=True)
-    text: str
 
-#DB SETUP
+class Task(SQLModel, table=True):
+    id: Optional[int] = Field(default=None, primary_key=True)
+    title: str
+    description: str
+    completed: bool = False
+    user_id: Optional[int] = Field(default=None, foreign_key="user.id")
+
 sqlite_file_name = "database.db"
 sqlite_url = f"sqlite:///{sqlite_file_name}"
 
-connect_args = {"check_same_thread": False}
-engine = create_engine(sqlite_url, connect_args=connect_args)
+engine = create_engine(
+    sqlite_url,
+    connect_args={"check_same_thread": False}
+)
 
 def create_db_and_tables():
     SQLModel.metadata.create_all(engine)
@@ -30,5 +29,3 @@ def create_db_and_tables():
 def get_session():
     with Session(engine) as session:
         yield session
-
-SessionDep = Annotated[Session, Depends(get_session)]

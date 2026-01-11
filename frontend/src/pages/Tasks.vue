@@ -5,13 +5,13 @@
         <div class="hero-main hero-section">
 
         <h1>
-          A smarter way to get<br />
-          <span>things done</span>
+          Where planning feels<br />
+          <span>effortless</span>
         </h1>
 
         <p class="hero-description">
-          Simplify your workflow, manage tasks efficiently, and achieve your goals faster.
-          Start your journey to better productivity today!
+          Plan your tasks, track progress, and clear your mind from daily chaos.
+          Everything in its place, every day under control.
         </p>
 
         <router-link to="/login">

@@ -7,6 +7,7 @@ import Register from '@/pages/Register.vue'
 import Login from '@/pages/Login.vue'
 import Profile from '@/pages/Profile.vue'
 import Subscription from '@/pages/Subscription.vue'
+import TasksWorkspace from '@/pages/TasksWorkspace.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -19,8 +20,14 @@ const router = createRouter({
 
     {
       path: '/tasks',
-      name: 'Tasks',
-      component: Tasks
+      component: Tasks,
+      children: [
+        {
+          path: '',
+          name: 'Tasks',
+          component: TasksWorkspace
+        }
+      ]
     },
 
     {

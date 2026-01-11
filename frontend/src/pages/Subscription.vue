@@ -1,7 +1,7 @@
 <template>
   <div class="pricing-page">
 
-    <h1>Choose Your Plan</h1>
+    <h1>Choose your plan</h1>
     <p class="subtitle">Flexible pricing to suit your productivity needs</p>
 
     <div class="plans-container">
@@ -54,11 +54,12 @@
 h1 {
   font-size: 48px;
   font-weight: 800;
+  line-height: 1.15;
+  margin: 0 0 10px;
 }
 
 h2 {
   font-size: 24px;
-  margin-bottom: 10px;
 }
 
 p {
@@ -74,6 +75,7 @@ p {
   font-family: system-ui;
   color: #0b0b0b;
   background: #f9f9f9;
+  margin-top: 5em;
 }
 
 .subtitle {

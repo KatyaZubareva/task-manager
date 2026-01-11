@@ -28,14 +28,34 @@
 
 <script setup>
 import { ref } from 'vue'
+import { useRouter } from 'vue-router'
 
 const email = ref('')
 const password = ref('')
+const router = useRouter()
 
-const login = () => {
-  console.log('Logged in with:', email.value)
+const login = async () => {
+  const form = new FormData()
+  form.append('username', email.value)
+  form.append('password', password.value)
+
+  const res = await fetch('http://localhost:8000/token', {
+    method: 'POST',
+    body: form
+  })
+
+  if (!res.ok) {
+    alert('Invalid credentials')
+    return
+  }
+
+  const data = await res.json()
+  localStorage.setItem('token', data.access_token)
+
+  router.push('/tasks')
 }
 </script>
+
 
 <style scoped>
 
@@ -45,7 +65,7 @@ const login = () => {
   display: flex;
   justify-content: center;
   align-items: center;
-  background: #fcfcfc;
+  background-color: #f9fafb;
   overflow: hidden;
   font-family: system-ui;
   padding: 0;

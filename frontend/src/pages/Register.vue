@@ -37,19 +37,37 @@
 
 <script setup>
 import { ref } from 'vue'
+import { useRouter } from 'vue-router'
 
 const email = ref('')
 const password = ref('')
 const confirm = ref('')
+const router = useRouter()
 
-const register = () => {
+const register = async () => {
   if (password.value !== confirm.value) {
     alert('Passwords do not match')
     return
   }
-  console.log('Registered:', email.value)
+
+  const res = await fetch('http://localhost:8000/register', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      email: email.value,
+      password: password.value
+    })
+  })
+
+  if (!res.ok) {
+    alert('Registration error')
+    return
+  }
+
+  router.push('/login')
 }
 </script>
+
 
 <style scoped>
 
@@ -78,7 +96,7 @@ p {
   justify-content: center;
   align-items: center;
   min-height: 100vh;
-  background: #fcfcfc;
+  background-color: #f9fafb;
   font-family: system-ui;
   padding: 20px;
 }

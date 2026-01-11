@@ -37,20 +37,41 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
+import { useRouter } from 'vue-router'
+
+const router = useRouter()
 
 const user = ref({
-  name: 'Alex Johnson',
-  email: 'alex.j@example.com',
-  bio: 'Product Designer & Task Master. Helping people organize their lives more efficiently.',
-  avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Alex' // Генерация стильного аватара
+  name: '',
+  email: '',
+  bio: '',
+  avatar: ''
+})
+
+onMounted(() => {
+  const token = localStorage.getItem('token')
+
+  if (!token) {
+    router.push('/login')
+    return
+  }
+
+  user.value = {
+    name: 'User',
+    email: localStorage.getItem('email'),
+    bio: 'Task Manager user',
+    avatar: `https://api.dicebear.com/7.x/avataaars/svg?seed=${localStorage.getItem('email')}`
+  }
 })
 
 const handleLogout = () => {
-  console.log('Logging out...')
-  // Логика выхода
+  localStorage.removeItem('token')
+  localStorage.removeItem('email')
+  router.push('/login')
 }
 </script>
+
 
 <style scoped>
 .profile-page {
@@ -128,7 +149,6 @@ const handleLogout = () => {
   margin: 25px 0;
 }
 
-/* Контентная часть */
 .profile-content {
   text-align: left;
 }
