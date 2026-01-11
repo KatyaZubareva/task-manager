@@ -1,6 +1,6 @@
 <script setup>
 import { useCookies } from 'vue3-cookies';
-import { ref } from 'vue';
+import { ref, computed, onMounted } from 'vue';
 
 const { cookies } = useCookies()
 
@@ -15,6 +15,26 @@ const rejectCookies = () => {
 }
 
 const showBanner = ref(!cookies.get('cookies_accepted'))
+const isAuthenticated = ref(false)
+
+const checkAuth = () => {
+  const token = localStorage.getItem('token')
+  isAuthenticated.value = !!token
+}
+
+onMounted(() => {
+  checkAuth()
+  
+  window.addEventListener('storage', () => {
+    checkAuth()
+  })
+  
+  window.addEventListener('popstate', checkAuth)
+})
+
+const tasksLink = computed(() => {
+  return isAuthenticated.value ? '/tasks/workspace' : '/tasks'
+})
 </script>
 
 <template>
@@ -27,7 +47,7 @@ const showBanner = ref(!cookies.get('cookies_accepted'))
 
       <div class="navigation">
         <h3><router-link to="/">Home</router-link></h3>
-        <h3><router-link to="/tasks">Tasks</router-link></h3>
+        <h3><router-link :to="tasksLink">Tasks</router-link></h3>
         <h3><router-link to="/subscription">Subscription</router-link></h3>
       </div>
 
@@ -60,7 +80,6 @@ const showBanner = ref(!cookies.get('cookies_accepted'))
 </template>
 
 <style scoped>
-
 h1 {
   font-size: 48px;
 }
@@ -182,7 +201,6 @@ a:hover {
   transform: translateY(-2px);
   color: #e03f00;
 }
-
 
 .register-btn {
   background-color: black;

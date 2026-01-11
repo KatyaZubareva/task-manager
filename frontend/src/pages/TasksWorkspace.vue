@@ -4,21 +4,20 @@
       
       <header class="header">
         <div class="header-info">
-          <h1>Мои задачи</h1>
-          <p v-if="tasks.length">У вас {{ tasks.length }} активных дел</p>
+          <h1>My Tasks</h1>
+          <p v-if="tasks.length">You have {{ tasks.length }} active tasks</p>
         </div>
         <router-link to="/tasks/new">
           <button class="add-btn">
             <span class="plus-icon">+</span>
-            Новая задача
+            New Task
           </button>
         </router-link>
       </header>
 
       <div v-if="tasks.length === 0" class="empty-state">
-        <div class="empty-icon">✨</div>
-        <h3>Все чисто!</h3>
-        <p>На сегодня задач больше нет. Можно отдохнуть.</p>
+        <h3>All Clear!</h3>
+        <p>No more tasks for today. Time to relax.</p>
       </div>
 
       <div v-else class="task-grid">
@@ -51,7 +50,7 @@ const loadTasks = async () => {
     })
     tasks.value = await res.json()
   } catch (e) {
-    console.error("Ошибка загрузки:", e)
+    console.error("Loading error:", e)
   }
 }
 
@@ -82,16 +81,20 @@ onMounted(loadTasks)
 </script>
 
 <style scoped>
+
 .tasks-container {
   min-height: 100vh;
-  background: radial-gradient(circle at top right, #f8fafc, #eff6ff);
-  padding: 40px 20px;
-  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  width: 100%;
+  background-color: #f9fafb;
+  font-family: system-ui, -apple-system, sans-serif;
+  color: #0b0b0b;
+  padding: 60px 20px;
 }
 
 .tasks-wrapper {
   max-width: 900px;
   margin: 0 auto;
+  margin-top: 8em;
 }
 
 .header {
@@ -102,69 +105,59 @@ onMounted(loadTasks)
 }
 
 .header h1 {
-  font-size: 2.5rem;
+  font-size: 36px;
   font-weight: 800;
-  letter-spacing: -0.02em;
-  color: #1e293b;
   margin: 0;
 }
 
 .header p {
-  color: #64748b;
-  margin-top: 5px;
+  color: #6c7a89;
+  font-size: 16px;
+  margin: 5px 0 0;
+}
+
+a {
+  text-decoration: none;
 }
 
 .add-btn {
-  background: #4f46e5;
+  background-color: #0b0b0b;
+  text-decoration: none;
   color: white;
+  padding: 12px 24px;
   border: none;
-  padding: 14px 28px;
-  border-radius: 16px;
-  font-weight: 600;
+  border-radius: 1000px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s ease;
   display: flex;
   align-items: center;
-  gap: 10px;
-  cursor: pointer;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  box-shadow: 0 10px 15px -3px rgba(79, 70, 229, 0.3);
+  gap: 8px;
 }
 
 .add-btn:hover {
+  background-color: #ff4500;
   transform: translateY(-2px);
-  background: #4338ca;
-  box-shadow: 0 20px 25px -5px rgba(79, 70, 229, 0.4);
+  box-shadow: 0 4px 12px rgba(255, 69, 0, 0.2);
 }
 
 .task-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
   gap: 20px;
 }
 
 .empty-state {
   text-align: center;
-  padding: 100px 20px;
+  padding: 80px 20px;
   background: white;
-  border-radius: 30px;
-  border: 2px dashed #e2e8f0;
+  border-radius: 24px;
+  border: 1px solid #e5e7eb;
 }
 
 .empty-icon {
-  font-size: 3rem;
-  margin-bottom: 15px;
-}
-
-.list-enter-active,
-.list-leave-active {
-  transition: all 0.5s ease;
-}
-.list-enter-from {
-  opacity: 0;
-  transform: translateY(30px);
-}
-.list-leave-to {
-  opacity: 0;
-  transform: scale(0.9);
+  font-size: 40px;
+  margin-bottom: 10px;
 }
 
 @media (max-width: 600px) {
@@ -172,10 +165,6 @@ onMounted(loadTasks)
     flex-direction: column;
     align-items: flex-start;
     gap: 20px;
-  }
-  .add-btn {
-    width: 100%;
-    justify-content: center;
   }
 }
 </style>

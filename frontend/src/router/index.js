@@ -20,20 +20,14 @@ const router = createRouter({
 
     {
       path: '/tasks',
-      component: Tasks,
-      children: [
-        {
-          path: '',
-          name: 'Tasks',
-          component: TasksWorkspace
-        }
-      ]
+      name: 'Tasks',
+      component: Tasks
     },
 
     {
-      path: '/:pathMatch(.*)*',
-      name: 'NotFound',
-      component: NotFound
+      path: '/tasks/workspace',
+      name: 'TasksWorkspace',
+      component: TasksWorkspace
     },
 
     {
