@@ -1,27 +1,23 @@
 <template>
   <div class="layout-card">
-    <!-- Обычный слот -->
     <div class="card-header">
       <slot name="header">
         <h2>Default Header</h2>
       </slot>
     </div>
 
-    <!-- Именованный слот -->
     <div class="card-content">
       <slot name="content">
         <p>Default content</p>
       </slot>
     </div>
 
-    <!-- Слот с ограниченной областью видимости (scoped slot) -->
     <div class="card-footer">
       <slot name="footer" :message="footerMessage" :count="itemCount">
         <p>Default footer: {{ footerMessage }}</p>
       </slot>
     </div>
 
-    <!-- Обычный слот без имени (default) -->
     <div class="card-body">
       <slot>
         <p>Default body content</p>
